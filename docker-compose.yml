@@ -1,0 +1,64 @@
+# 智能客服 Agent 项目依赖的中间件一键启动配置
+# 使用前请先安装 Docker Desktop：https://www.docker.com/products/docker-desktop/
+#
+# 启动： docker compose up -d
+# 停止： docker compose down
+# 停止并清除数据： docker compose down -v
+#
+# 启动后请将 llm_backend/.env 中的 DB_TYPE 改为 mysql，并确认以下连接信息一致。
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: kefu_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change-me}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-kefu_agent}
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-change-me}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  neo4j:
+    image: neo4j:5.20
+    container_name: kefu_neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-change-me}
+      NEO4J_dbms_memory_heap_initial__size: 512m
+      NEO4J_dbms_memory_heap_max__size: 1G
+      TZ: Asia/Shanghai
+    ports:
+      - "7474:7474"   # HTTP 管理界面
+      - "7687:7687"   # Bolt 协议
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD:-change-me}", "RETURN 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.2
+    container_name: kefu_redis
+    restart: unless-stopped
+    # 若需要密码，去掉下面 command 注释并同步修改 .env 中的 REDIS_PASSWORD
+    # command: redis-server --requirepass ${REDIS_PASSWORD:-change-me}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mysql_data:
+  neo4j_data:
+  redis_data:

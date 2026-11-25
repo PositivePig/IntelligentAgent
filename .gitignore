@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+log/
+
+# Local development
+.env.local
+.env.*.local
+
+# Runtime state and generated data
+*.db
+*.db-shm
+*.db-wal
+uploads/*
+!uploads/.gitkeep
+llm_backend/uploads/*
+!llm_backend/uploads/.gitkeep
+logs/*
+!logs/.gitkeep
+llm_backend/logs/*
+!llm_backend/logs/.gitkeep
+llm_backend/app/lg_agent/logs/*
+llm_backend/scripts/logs/*
+llm_backend/data/*
+!llm_backend/data/.gitkeep
+
+# GraphRAG generated artifacts
+llm_backend/graphrag_project/data/input/*
+!llm_backend/graphrag_project/data/input/.gitkeep
+llm_backend/graphrag_project/data/cache/*
+!llm_backend/graphrag_project/data/cache/.gitkeep
+llm_backend/graphrag_project/data/output/*
+!llm_backend/graphrag_project/data/output/.gitkeep
+llm_backend/graphrag_project/data/logs/*
+!llm_backend/graphrag_project/data/logs/.gitkeep
+
+# Test cache
+.pytest_cache/
+
+# Frontend build output is part of the deliverable
+!llm_backend/static/dist/
+!llm_backend/static/dist/**
